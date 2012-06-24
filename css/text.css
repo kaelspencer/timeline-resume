@@ -1,0 +1,10 @@
+@import url(comfortaa.css);
+
+body {
+  font: 100%/1em ComfortaaRegular, 'Helvetica Neue';
+  color: #9ea4a3;
+}
+
+strong, b {
+    font-family: ComfortaaBold;
+}

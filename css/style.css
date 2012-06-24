@@ -1,0 +1,6 @@
+@import url(normalize.css);
+@import url(text.css);
+
+body {
+    background-color: #d3d5d1;
+}
