@@ -1,8 +1,9 @@
 @import url(normalize.css);
 @import url(text.css);
+@import url(timeline.css);
 
 body {
-    background-color: #d3d5d1;
+	background-color: #d3d5d1;
 }
 
 .left {
@@ -14,7 +15,6 @@ body {
 }
 
 div.maintop {
-	width: 100%;
 	height: 140px;
 	margin: 20px 0 0 20px;
 	padding: 10px;
@@ -48,9 +48,18 @@ a {
 }
 
 a:visited {
-    color: #5079a6;
+	color: #5079a6;
 }
 
 a:hover, a:active {
 	color: #364364;
+}
+
+.clear {
+  clear: both;
+  display: block;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+  height: 0;
 }

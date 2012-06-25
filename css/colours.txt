@@ -1,7 +1,7 @@
 http://www.colourlovers.com/palette/2245574/Aeropostale
 
-High Seas: 364364
-can i?: 5079a6
-Silver: 8d827d
-9ea4a3: 9ea4a3
-frost: d3d5d1
+High Seas: 364364 (54, 67, 100)
+can i?: 5079a6 (80, 121, 166)
+Silver: 8d827d (141, 130, 125)
+9ea4a3: 9ea4a3 (158, 164, 163)
+frost: d3d5d1 (211, 213, 209)
