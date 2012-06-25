@@ -4,25 +4,27 @@
     width: 100%;
     height: 500px;
     position: relative;
+    overflow: hidden;
 }
 
-.timeline .line {
-    width: 100%;
+.timeline .line-border {
     border-top: 4px solid rgb(141, 130, 125);
     border-bottom: 4px solid rgb(141, 130, 125);
+
+    position: absolute;
+    bottom: 50%;
+}
+
+.timeline .line-border .line {
+    /* A large width here allows the years to flow off the edge of the screen. */
+    width: 2500px;
+    left: -500px;
     padding: 20px 0px 20px 0px;
 
     font-size: 3em;
     color: #364364;
-
-    position: absolute;
-    bottom: 200px;
 }
 
 .timeline .line span {
-    margin-left: 150px;
-}
-
-.timeline .line span.left {
-    margin-left: 120px;
+    margin-left: 100px;
 }
