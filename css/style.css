@@ -41,3 +41,16 @@ div.maintop .text .social {
 	bottom: 0;
 	right: 0;
 }
+
+a {
+	text-decoration: none;
+	color: #8d827d;
+}
+
+a:visited {
+    color: #5079a6;
+}
+
+a:hover, a:active {
+	color: #364364;
+}
