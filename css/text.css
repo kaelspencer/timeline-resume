@@ -8,3 +8,29 @@ body {
 strong, b {
     font-family: ComfortaaBold;
 }
+
+/* Headings */
+
+h1 {
+  font-size: 1.786em;
+}
+
+h2 {
+  font-size: 1.643em;
+}
+
+h3 {
+  font-size: 1.5em;
+}
+
+h4 {
+  font-size: 1.357em;
+}
+
+h5 {
+  font-size: 1.214em;
+}
+
+h6 {
+  font-size: 1.071em;
+}
