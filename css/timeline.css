@@ -7,7 +7,7 @@
     overflow: hidden;
 }
 
-.timeline .line-border {
+.timeline .line {
     border-top: 4px solid rgb(141, 130, 125);
     border-bottom: 4px solid rgb(141, 130, 125);
 
@@ -15,9 +15,11 @@
     bottom: 50%;
 }
 
-.timeline .line-border .line {
-    /* A large width here allows the years to flow off the edge of the screen. */
-    width: 2500px;
+.timeline .line #line-draggable {
+    /* A large width here allows the years to flow off the edge of the screen.
+       It should be the same width as all of the elements combined.
+       width = (number of elements) * 200 - 60 */
+    width: 1940px;
     left: -500px;
     padding: 20px 0px 20px 0px;
 
@@ -26,5 +28,11 @@
 }
 
 .timeline .line span {
-    margin-left: 100px;
+    margin-left: 20px;
+    margin-right: 80px;
+    width: 100px;
+}
+
+.timeline .line span.last {
+    margin-right: 20px;
 }
