@@ -10,29 +10,30 @@
 .timeline .line {
     border-top: 4px solid rgb(141, 130, 125);
     border-bottom: 4px solid rgb(141, 130, 125);
+    padding-top: 1px;
+    height: 50px;
 
     position: absolute;
     bottom: 50%;
 }
 
 .timeline .line #line-draggable {
-    /* A large width here allows the years to flow off the edge of the screen.
-       It should be the same width as all of the elements combined.
-       width = (number of elements) * 200 - 60 */
-    width: 1940px;
+    width: 100%;
     left: -500px;
-    padding: 20px 0px 20px 0px;
 
     font-size: 3em;
     color: #364364;
 }
 
-.timeline .line span {
+.timeline .line div {
     margin-left: 20px;
     margin-right: 80px;
     width: 100px;
+    display: inline;
+    position: relative;
+    bottom: -8px;
 }
 
-.timeline .line span.last {
+.timeline .line div.last {
     margin-right: 20px;
 }
