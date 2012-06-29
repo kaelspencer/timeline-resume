@@ -1,3 +1,6 @@
+// Having problems with storing variables in the object.
+var g_line_width = 0;
+
 function timeline_init(element, years) {
     this.container = $('#' + element);
     this.line = $('<div class="line"/>');
@@ -21,8 +24,8 @@ function timeline_init(element, years) {
     // element_size = width of text + margin left + margin right = 100 + 20 + 80
     // Subtract the right marging from the last div.
     // width = (number of years) * (100 + 20 + 80) - 60
-    this.width = years.length * 200 - 60;
-    console.log(this.width);
+    g_line_width = years.length * 200 - 60;
+    console.log(g_line_width);
     console.log(this.line.width());
 
     $('#line-draggable div').last().addClass('last');
@@ -31,7 +34,7 @@ function timeline_init(element, years) {
 
 function timeline_horizontal_scroll_stop(event, ui) {
     var line = $('#line-draggable');
-    var width = line.width();
+    var width = g_line_width;
     var window_width = $(window).width();
     var visible = width + ui.position.left;
     var move = 0;
@@ -41,7 +44,6 @@ function timeline_horizontal_scroll_stop(event, ui) {
         move = -1 * ui.position.left;
     } else if(visible < window_width) {
         // The right side is to the left of the right edge of the screen.
-        //move = $(window).width() - visible + 120;
         move = $(window).width() - visible;
     }
 
@@ -55,7 +57,6 @@ function timeline_horizontal_scroll_stop(event, ui) {
 }
 
 function timeline_draw() {
-    console.log('draw');
 }
 
 function timeline() {

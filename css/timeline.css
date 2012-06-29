@@ -11,6 +11,7 @@
     border-top: 4px solid rgb(141, 130, 125);
     border-bottom: 4px solid rgb(141, 130, 125);
     padding-top: 1px;
+    padding-left: 0px;
     height: 50px;
 
     position: absolute;
@@ -19,21 +20,21 @@
 
 .timeline .line #line-draggable {
     width: 100%;
-    left: -500px;
+    left: -300px;
+    bottom: -8px;
+    white-space: nowrap;
 
     font-size: 3em;
     color: #364364;
 }
 
-.timeline .line div {
+.timeline .line #line-draggable div {
     margin-left: 20px;
     margin-right: 80px;
     width: 100px;
-    display: inline;
-    position: relative;
-    bottom: -8px;
+    display: inline-block;
 }
 
-.timeline .line div.last {
+.timeline .line #line-draggable div.last {
     margin-right: 20px;
 }
