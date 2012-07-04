@@ -31,6 +31,8 @@ var timeline = {
 
         $('#line-draggable div').last().addClass('last');
         timeline.line.css('width', '100%');
+
+        timeline.draw();
     },
     horizontal_scroll_stop: function(event, ui) {
         var window_width = $(window).width();
@@ -54,7 +56,67 @@ var timeline = {
         }
     },
     draw: function() {
-        console.log('draw');
+        var bubble_container = $('<div class="bubble-container" />');
+        timeline.container.prepend(bubble_container);
+
+        timeline.create_bubble(bubble_container);
+    },
+    create_bubble: function(bubble_container) {
+        var bubble = $('<div class="bubble">content</div>');
+        var bubble_left = 300;
+
+        bubble.css('left', bubble_left + 'px');
+        bubble_container.append(bubble);
+
+        var width = bubble.width();
+        width = 218;
+        var left = {
+            x: Math.round(bubble.position().left),
+            y: Math.round(bubble.position().top + bubble.height())
+        }
+        left.y = 189;
+        left.x = bubble_left + 3;
+
+        var right = {
+            x: Math.round(bubble.position().left + width),
+            y: left.y
+        }
+        right.x = bubble_left + width;
+
+        console.log('(' + left.x + ', ' + left.y + ')');
+        console.log('(' + right.x + ', ' + right.y + ')');
+
+        var target = {
+            x: Math.round(left.x + width * 0.1),
+            y: Math.round(timeline.line.position().top - 30)
+        }
+
+        console.log('target: (' + target.x + ', ' + target.y + ')');
+
+        bubble_container.append(timeline.draw_line(left, target));
+        bubble_container.append(timeline.draw_line(right, target));
+    },
+    draw_line: function(source, destination) {
+        var dx = destination.x - source.x;
+        var dy = destination.y - source.y;
+        var length = Math.round(Math.sqrt(dx * dx + dy * dy));
+        var angle = Math.atan2(dy, dx);
+
+        console.log('dx: ' + dx);
+        console.log('dy: ' + dy);
+        console.log('length: ' + length);
+        console.log('angle: ' + angle);
+
+        var line = $('<div />')
+            .addClass('bubble-line')
+            .width(length)
+            .css({
+                '-webkit-transform-origin': '0% 0%',
+                '-webkit-transform': 'rotate(' + angle + 'rad)',
+                'top': source.y + 'px',
+                'left': source.x + 'px'
+            });
+        return line;
     }
 }
 
