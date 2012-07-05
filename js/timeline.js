@@ -59,38 +59,35 @@ var timeline = {
         var bubble_container = $('<div class="bubble-container" />');
         timeline.container.prepend(bubble_container);
 
-        timeline.create_bubble(bubble_container);
+        timeline.create_bubble(bubble_container, 300);
     },
-    create_bubble: function(bubble_container) {
-        var bubble = $('<div class="bubble">content</div>');
-        var bubble_left = 300;
+    create_bubble: function(bubble_container, left_offset) {
+        var bubble = $('<div>')
+            .addClass('bubble')
+            .appendTo(bubble_container)
+            .height(150) // This needs to be in sync with the CSS class.
+            .width(200) // This needs to be in sync with the CSS class.
+            .css({
+                'left': left_offset + 'px'
+            });
 
-        bubble.css('left', bubble_left + 'px');
-        bubble_container.append(bubble);
-
-        var width = bubble.width();
-        width = 218;
         var left = {
-            x: Math.round(bubble.position().left),
-            y: Math.round(bubble.position().top + bubble.height())
+            x: left_offset + 8,
+            y: bubble.height() + 41
         }
-        left.y = 189;
-        left.x = bubble_left + 3;
 
         var right = {
-            x: Math.round(bubble.position().left + width),
+            x: left_offset + bubble.width() + 12,
             y: left.y
         }
-        right.x = bubble_left + width;
+
+        var target = {
+            x: Math.round(left.x + bubble.width() * 0.5),
+            y: timeline.line.position().top - left.y + 31
+        }
 
         console.log('(' + left.x + ', ' + left.y + ')');
         console.log('(' + right.x + ', ' + right.y + ')');
-
-        var target = {
-            x: Math.round(left.x + width * 0.1),
-            y: Math.round(timeline.line.position().top - 30)
-        }
-
         console.log('target: (' + target.x + ', ' + target.y + ')');
 
         bubble_container.append(timeline.draw_line(left, target));
@@ -102,17 +99,18 @@ var timeline = {
         var length = Math.round(Math.sqrt(dx * dx + dy * dy));
         var angle = Math.atan2(dy, dx);
 
-        console.log('dx: ' + dx);
-        console.log('dy: ' + dy);
-        console.log('length: ' + length);
-        console.log('angle: ' + angle);
-
-        var line = $('<div />')
+        var line = $('<div>')
             .addClass('bubble-line')
             .width(length)
             .css({
+                'transform-origin': '0% 0%',
+                'transform': 'rotate(' + angle + 'rad)',
                 '-webkit-transform-origin': '0% 0%',
                 '-webkit-transform': 'rotate(' + angle + 'rad)',
+                '-moz-transform-origin': '0% 0%',
+                '-moz-transform': 'rotate(' + angle + 'rad)',
+                '-o-transform-origin': '0% 0%',
+                '-o-transform': 'rotate(' + angle + 'rad)',
                 'top': source.y + 'px',
                 'left': source.x + 'px'
             });
