@@ -21,7 +21,6 @@
 
 .timeline .line #line-draggable {
     width: 100%;
-    left: -300px;
     bottom: -8px;
     white-space: nowrap;
 

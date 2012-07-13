@@ -32,7 +32,7 @@ var timeline = {
         $('#line-draggable div').last().addClass('last');
         timeline.line.css('width', '100%');
 
-        timeline.draw();
+        timeline.draggable.animate({ left: '-=300' }, 50, timeline.draw);
     },
     horizontal_scroll_stop: function(event, ui) {
         var window_width = $(window).width();
@@ -56,10 +56,13 @@ var timeline = {
         }
     },
     draw: function() {
+        $('#timeline .bubble-container').remove();
         var bubble_container = $('<div class="bubble-container" />');
         timeline.container.prepend(bubble_container);
 
-        timeline.create_bubble(bubble_container, 300);
+        timeline.create_bubble(bubble_container, 150);
+        timeline.create_bubble(bubble_container, 400);
+        timeline.create_bubble(bubble_container, 700);
     },
     create_bubble: function(bubble_container, left_offset) {
         var bubble = $('<div>')
@@ -83,7 +86,7 @@ var timeline = {
 
         var target = {
             x: Math.round(left.x + bubble.width() * 0.5),
-            y: timeline.line.position().top - left.y + 31
+            y: timeline.line.position().top
         }
 
         console.log('(' + left.x + ', ' + left.y + ')');
