@@ -3,11 +3,16 @@ var timeline = {
     line: null,
     draggable: null,
     width: 0,
+    bubble_base: null,
 
     init: function(element, years) {
         timeline.container = $('#' + element);
         timeline.line = $('<div>').addClass('line');
         timeline.draggable = $('<div>', { id: 'line-draggable'});
+        timeline.bubble_base = $('<div>')
+            .addClass('bubble')
+            .height(150) // This needs to be in sync with the CSS class.
+            .width(200); // This needs to be in sync with the CSS class.
 
         timeline.container.addClass('timeline');
         timeline.container.append(timeline.line);
@@ -68,11 +73,8 @@ var timeline = {
         timeline.create_bubble_bottom(bubble_container_bottom, 300);
     },
     create_bubble_top: function(bubble_container, left_offset) {
-        var bubble = $('<div>')
-            .addClass('bubble')
+        var bubble = timeline.bubble_base.clone()
             .appendTo(bubble_container)
-            .height(150) // This needs to be in sync with the CSS class.
-            .width(200) // This needs to be in sync with the CSS class.
             .css({
                 'left': left_offset + 'px'
             });
@@ -96,14 +98,11 @@ var timeline = {
         bubble_container.append(timeline.draw_line(right, target));
     },
     create_bubble_bottom: function(bubble_container, left_offset) {
-        var bubble = $('<div>')
-            .addClass('bubble')
+        var bubble = timeline.bubble_base.clone()
             .appendTo(bubble_container)
-            .height(150) // This needs to be in sync with the CSS class.
-            .width(200) // This needs to be in sync with the CSS class.
             .css({
                 'left': left_offset + 'px',
-                'bottom': '0'
+                'bottom': '0px'
             });
 
         var left = {
