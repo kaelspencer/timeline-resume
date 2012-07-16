@@ -6,8 +6,8 @@ var timeline = {
 
     init: function(element, years) {
         timeline.container = $('#' + element);
-        timeline.line = $('<div class="line"/>');
-        timeline.draggable = $('<div id="line-draggable">');
+        timeline.line = $('<div>').addClass('line');
+        timeline.draggable = $('<div>', { id: 'line-draggable'});
 
         timeline.container.addClass('timeline');
         timeline.container.append(timeline.line);
@@ -57,14 +57,17 @@ var timeline = {
     },
     draw: function() {
         $('#timeline .bubble-container').remove();
-        var bubble_container = $('<div class="bubble-container" />');
-        timeline.container.prepend(bubble_container);
+        var bubble_container_bottom = $('<div>').addClass('bubble-container');
+        var bubble_container_top = bubble_container_bottom.clone();
 
-        timeline.create_bubble(bubble_container, 150);
-        timeline.create_bubble(bubble_container, 400);
-        timeline.create_bubble(bubble_container, 700);
+        timeline.container.prepend(bubble_container_top);
+        timeline.container.append(bubble_container_bottom);
+
+        timeline.create_bubble_top(bubble_container_top, 150);
+        timeline.create_bubble_top(bubble_container_top, 800);
+        timeline.create_bubble_bottom(bubble_container_bottom, 300);
     },
-    create_bubble: function(bubble_container, left_offset) {
+    create_bubble_top: function(bubble_container, left_offset) {
         var bubble = $('<div>')
             .addClass('bubble')
             .appendTo(bubble_container)
@@ -75,23 +78,48 @@ var timeline = {
             });
 
         var left = {
-            x: left_offset + 8,
-            y: bubble.height() + 41
+            x: left_offset + 7,
+            y: bubble.height() + 15
         }
 
         var right = {
-            x: left_offset + bubble.width() + 12,
+            x: left_offset + bubble.width() + 13,
             y: left.y
         }
 
         var target = {
             x: Math.round(left.x + bubble.width() * 0.5),
-            y: timeline.line.position().top
+            y: timeline.line.position().top - 24
         }
 
-        console.log('(' + left.x + ', ' + left.y + ')');
-        console.log('(' + right.x + ', ' + right.y + ')');
-        console.log('target: (' + target.x + ', ' + target.y + ')');
+        bubble_container.append(timeline.draw_line(left, target));
+        bubble_container.append(timeline.draw_line(right, target));
+    },
+    create_bubble_bottom: function(bubble_container, left_offset) {
+        var bubble = $('<div>')
+            .addClass('bubble')
+            .appendTo(bubble_container)
+            .height(150) // This needs to be in sync with the CSS class.
+            .width(200) // This needs to be in sync with the CSS class.
+            .css({
+                'left': left_offset + 'px',
+                'bottom': '0'
+            });
+
+        var left = {
+            x: left_offset + 7,
+            y: bubble.position().top + 3
+        }
+
+        var right = {
+            x: left_offset + bubble.width() + 11,
+            y: left.y
+        }
+
+        var target = {
+            x: Math.round(left.x + bubble.width() * 0.5),
+            y: -1
+        }
 
         bubble_container.append(timeline.draw_line(left, target));
         bubble_container.append(timeline.draw_line(right, target));
@@ -121,7 +149,7 @@ var timeline = {
     }
 }
 
-$(document).ready(function() {
+$(function() {
     var years = ["2003","2004","2005","2006","2007","2008","2009","2010","2011","2012"];
     timeline.init('timeline', years);
 });
