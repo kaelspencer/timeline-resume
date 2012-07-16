@@ -4,6 +4,8 @@ var timeline = {
     draggable: null,
     width: 0,
     bubble_base: null,
+    bubble_top: null,
+    bubble_bottom: null,
 
     init: function(element, years) {
         timeline.container = $('#' + element);
@@ -13,6 +15,38 @@ var timeline = {
             .addClass('bubble')
             .height(150) // This needs to be in sync with the CSS class.
             .width(200); // This needs to be in sync with the CSS class.
+
+        timeline.bubble_top = {
+            target_y: function() { return timeline.line.position().top - 24 },
+            left: function(offset) {
+                return {
+                    x: offset + 7,
+                    y: timeline.bubble_base.height() + 15
+                }
+            },
+            right: function(offset) {
+                return {
+                    x: offset + timeline.bubble_base.width() + 13,
+                    y: timeline.bubble_base.height() + 15
+                }
+            }
+        };
+
+        timeline.bubble_bottom = {
+            target_y: -1,
+            left: function(offset_x, offset_y) {
+                return {
+                    x: offset_x + 7,
+                    y: offset_y + 3
+                }
+            },
+            right: function(offset_x, offset_y) {
+                return {
+                    x: offset_x + timeline.bubble_base.width() + 11,
+                    y: timeline.bubble_bottom.left(offset_x, offset_y).y
+                }
+            }
+        };
 
         timeline.container.addClass('timeline');
         timeline.container.append(timeline.line);
@@ -79,19 +113,12 @@ var timeline = {
                 'left': left_offset + 'px'
             });
 
-        var left = {
-            x: left_offset + 7,
-            y: bubble.height() + 15
-        }
-
-        var right = {
-            x: left_offset + bubble.width() + 13,
-            y: left.y
-        }
+        var left = timeline.bubble_top.left(left_offset);
+        var right = timeline.bubble_top.right(left_offset);
 
         var target = {
             x: Math.round(left.x + bubble.width() * 0.5),
-            y: timeline.line.position().top - 24
+            y: timeline.bubble_top.target_y()
         }
 
         bubble_container.append(timeline.draw_line(left, target));
@@ -105,19 +132,12 @@ var timeline = {
                 'bottom': '0px'
             });
 
-        var left = {
-            x: left_offset + 7,
-            y: bubble.position().top + 3
-        }
-
-        var right = {
-            x: left_offset + bubble.width() + 11,
-            y: left.y
-        }
+        var left = timeline.bubble_bottom.left(left_offset, bubble.position().top);
+        var right = timeline.bubble_bottom.right(left_offset, bubble.position().top);
 
         var target = {
             x: Math.round(left.x + bubble.width() * 0.5),
-            y: -1
+            y: timeline.bubble_bottom.target_y
         }
 
         bubble_container.append(timeline.draw_line(left, target));
