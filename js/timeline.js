@@ -29,11 +29,12 @@ var timeline = {
                     x: offset + timeline.bubble_base.width() + 13,
                     y: timeline.bubble_base.height() + 15
                 }
-            }
+            },
+            bottom: ''
         };
 
         timeline.bubble_bottom = {
-            target_y: -1,
+            target_y: function() { return -1; },
             left: function(offset_x, offset_y) {
                 return {
                     x: offset_x + 7,
@@ -45,7 +46,8 @@ var timeline = {
                     x: offset_x + timeline.bubble_base.width() + 11,
                     y: timeline.bubble_bottom.left(offset_x, offset_y).y
                 }
-            }
+            },
+            bottom: '0px'
         };
 
         timeline.container.addClass('timeline');
@@ -96,52 +98,32 @@ var timeline = {
     },
     draw: function() {
         $('#timeline .bubble-container').remove();
-        var bubble_container_bottom = $('<div>').addClass('bubble-container');
-        var bubble_container_top = bubble_container_bottom.clone();
+        var container_bottom = $('<div>').addClass('bubble-container');
+        var container_top = container_bottom.clone();
 
-        timeline.container.prepend(bubble_container_top);
-        timeline.container.append(bubble_container_bottom);
+        timeline.container.prepend(container_top);
+        timeline.container.append(container_bottom);
 
-        timeline.create_bubble_top(bubble_container_top, 150);
-        timeline.create_bubble_top(bubble_container_top, 800);
-        timeline.create_bubble_bottom(bubble_container_bottom, 300);
+        timeline.create_bubble(container_top, timeline.bubble_top, 150);
+        timeline.create_bubble(container_top, timeline.bubble_top, 800);
+        timeline.create_bubble(container_bottom, timeline.bubble_bottom, 300);
     },
-    create_bubble_top: function(bubble_container, left_offset) {
+    create_bubble: function(container, data, offset) {
         var bubble = timeline.bubble_base.clone()
-            .appendTo(bubble_container)
+            .appendTo(container)
             .css({
-                'left': left_offset + 'px'
+                'left': offset + 'px',
+                'bottom': data.bottom
             });
-
-        var left = timeline.bubble_top.left(left_offset);
-        var right = timeline.bubble_top.right(left_offset);
+        var top = bubble.position().top;
 
         var target = {
-            x: Math.round(left.x + bubble.width() * 0.5),
-            y: timeline.bubble_top.target_y()
+            x: Math.round(offset + bubble.width() * 0.5),
+            y: data.target_y()
         }
 
-        bubble_container.append(timeline.draw_line(left, target));
-        bubble_container.append(timeline.draw_line(right, target));
-    },
-    create_bubble_bottom: function(bubble_container, left_offset) {
-        var bubble = timeline.bubble_base.clone()
-            .appendTo(bubble_container)
-            .css({
-                'left': left_offset + 'px',
-                'bottom': '0px'
-            });
-
-        var left = timeline.bubble_bottom.left(left_offset, bubble.position().top);
-        var right = timeline.bubble_bottom.right(left_offset, bubble.position().top);
-
-        var target = {
-            x: Math.round(left.x + bubble.width() * 0.5),
-            y: timeline.bubble_bottom.target_y
-        }
-
-        bubble_container.append(timeline.draw_line(left, target));
-        bubble_container.append(timeline.draw_line(right, target));
+        container.append(timeline.draw_line(data.left(offset, top), target));
+        container.append(timeline.draw_line(data.right(offset, top), target));
     },
     draw_line: function(source, destination) {
         var dx = destination.x - source.x;
