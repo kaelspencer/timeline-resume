@@ -6,8 +6,11 @@ var timeline = {
     bubble_base: null,
     bubble_top: null,
     bubble_bottom: null,
+    year_start: 0,
+    year_end: 0,
+    events: null,
 
-    init: function(element, years) {
+    init: function(element, years, events) {
         timeline.container = $('#' + element);
         timeline.line = $('<div>').addClass('line');
         timeline.draggable = $('<div>', { id: 'line-draggable'});
@@ -59,16 +62,19 @@ var timeline = {
             stop: timeline.horizontal_scroll_stop
         });
 
-        years.forEach(function(element, index, array) {
-            var el = $('<div>' + element + '</div>');
-            timeline.draggable.append(el);
-        }, timeline);
+        timeline.year_start = years.start;
+        timeline.year_end = years.end;
+        timeline.events = events
+
+        for (var i = timeline.year_start; i <= timeline.year_end; i++) {
+            $('<div>').text(i).appendTo(timeline.draggable);
+        };
 
         // The draggable line has a width calculated by:
         // element_size = width of text + margin left + margin right = 100 + 20 + 80
         // Subtract the right marging from the last div.
         // width = (number of years) * (100 + 20 + 80) - 60
-        timeline.width = years.length * 200 - 60;
+        timeline.width = (timeline.year_end - timeline.year_start) * 200 - 60;
 
         $('#line-draggable div').last().addClass('last');
         timeline.line.css('width', '100%');
@@ -151,6 +157,15 @@ var timeline = {
 }
 
 $(function() {
-    var years = ["2003","2004","2005","2006","2007","2008","2009","2010","2011","2012"];
-    timeline.init('timeline', years);
+    var years = {
+        start: 2003,
+        end: 2012
+    }
+    var events = [
+        { date: 2004.5, title: 'a' },
+        { date: 2008, title: 'b' },
+        { date: 2006.25, title: 'c' }
+    ];
+
+    timeline.init('timeline', years, events);
 });
