@@ -6,8 +6,7 @@ var timeline = {
     bubble_base: null,
     bubble_top: null,
     bubble_bottom: null,
-    year_start: 0,
-    year_end: 0,
+    year: null,
     events: null,
 
     init: function(element, years, events) {
@@ -62,11 +61,10 @@ var timeline = {
             stop: timeline.horizontal_scroll_stop
         });
 
-        timeline.year_start = years.start;
-        timeline.year_end = years.end;
+        timeline.year = years;
         timeline.events = events
 
-        for (var i = timeline.year_start; i <= timeline.year_end; i++) {
+        for (var i = timeline.year.start; i <= timeline.year.end; i++) {
             $('<div>').text(i).appendTo(timeline.draggable);
         };
 
@@ -74,7 +72,7 @@ var timeline = {
         // element_size = width of text + margin left + margin right = 100 + 20 + 80
         // Subtract the right marging from the last div.
         // width = (number of years) * (100 + 20 + 80) - 60
-        timeline.width = (timeline.year_end - timeline.year_start) * 200 - 60;
+        timeline.width = (timeline.year.end - timeline.year.start) * 200 - 60;
 
         $('#line-draggable div').last().addClass('last');
         timeline.line.css('width', '100%');
@@ -106,30 +104,41 @@ var timeline = {
         $('#timeline .bubble-container').remove();
         var container_bottom = $('<div>').addClass('bubble-container');
         var container_top = container_bottom.clone();
+        var offset = timeline.draggable.position().left;
 
         timeline.container.prepend(container_top);
         timeline.container.append(container_bottom);
 
-        timeline.create_bubble(container_top, timeline.bubble_top, 150);
-        timeline.create_bubble(container_top, timeline.bubble_top, 800);
-        timeline.create_bubble(container_bottom, timeline.bubble_bottom, 300);
+        $.each(timeline.events, function() {
+            console.log(this.date);
+            var target = timeline.determine_date_position(this.date, offset);
+
+            if (target > 0) {
+                timeline.create_bubble(container_top, timeline.bubble_top, target);
+            } else {
+                console.log('Offscreen');
+            }
+        });
+
+        console.log('');
     },
     create_bubble: function(container, data, offset) {
+        var left = offset - 50;
         var bubble = timeline.bubble_base.clone()
             .appendTo(container)
             .css({
-                'left': offset + 'px',
+                'left': left + 'px',
                 'bottom': data.bottom
             });
         var top = bubble.position().top;
 
         var target = {
-            x: Math.round(offset + bubble.width() * 0.5),
+            x: offset,
             y: data.target_y()
         }
 
-        container.append(timeline.draw_line(data.left(offset, top), target));
-        container.append(timeline.draw_line(data.right(offset, top), target));
+        container.append(timeline.draw_line(data.left(left, top), target));
+        container.append(timeline.draw_line(data.right(left, top), target));
     },
     draw_line: function(source, destination) {
         var dx = destination.x - source.x;
@@ -153,6 +162,15 @@ var timeline = {
                 'left': source.x + 'px'
             });
         return line;
+    },
+    determine_date_position: function(date, offset) {
+        // The first part of a year starts on the center of the displayed year.
+        // A value of 2012.0 passed in would be in the center of "2012".
+        var start = 70;
+        var end = timeline.width - 70;
+        var pos = start + (date - timeline.year.start) * 200 + offset;
+
+        return pos;
     }
 }
 
@@ -162,9 +180,10 @@ $(function() {
         end: 2012
     }
     var events = [
-        { date: 2004.5, title: 'a' },
-        { date: 2008, title: 'b' },
-        { date: 2006.25, title: 'c' }
+        { date: 2003, title: 'a' },
+        { date: 2005, title: 'b' },
+        { date: 2008, title: 'c' },
+        { date: 2011, title: 'd' }
     ];
 
     timeline.init('timeline', years, events);
