@@ -72,7 +72,7 @@ var timeline = {
         // element_size = width of text + margin left + margin right = 100 + 20 + 80
         // Subtract the right marging from the last div.
         // width = (number of years) * (100 + 20 + 80) - 60
-        timeline.width = (timeline.year.end - timeline.year.start) * 200 - 60;
+        timeline.width = (timeline.year.end - timeline.year.start + 1) * 200 - 60;
 
         $('#line-draggable div').last().addClass('last');
         timeline.line.css('width', '100%');
