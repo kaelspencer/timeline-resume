@@ -95,7 +95,7 @@ var timeline = {
         if(move) {
             timeline.draggable.animate({
                 left: '+=' + move
-            }, 500, timeline.draw);
+            }, 200, timeline.draw);
         } else {
             timeline.draw();
         }
@@ -110,26 +110,25 @@ var timeline = {
         timeline.container.append(container_bottom);
 
         $.each(timeline.events, function() {
-            console.log(this.date);
             var target = timeline.determine_date_position(this.date, offset);
 
             if (target > 0) {
-                timeline.create_bubble(container_top, timeline.bubble_top, target);
-            } else {
-                console.log('Offscreen');
+                timeline.create_bubble(container_top, timeline.bubble_top, target, this);
             }
         });
-
-        console.log('');
     },
-    create_bubble: function(container, data, offset) {
+    create_bubble: function(container, data, offset, event) {
         var left = offset - 50;
         var bubble = timeline.bubble_base.clone()
             .appendTo(container)
             .css({
                 'left': left + 'px',
                 'bottom': data.bottom
-            });
+            })
+            .text(event.text);
+        $('<h1>')
+            .text(event.title)
+            .prependTo(bubble);
         var top = bubble.position().top;
 
         var target = {
@@ -180,10 +179,10 @@ $(function() {
         end: 2012
     }
     var events = [
-        { date: 2003, title: 'a' },
-        { date: 2005, title: 'b' },
-        { date: 2008, title: 'c' },
-        { date: 2011, title: 'd' }
+        { date: 2003, title: 'Event A', text: 'This is sample text for the event bubble.' },
+        { date: 2005, title: 'Event B', text: 'This is sample text for the event bubble.' },
+        { date: 2008, title: 'Event C', text: 'This is sample text for the event bubble.' },
+        { date: 2011, title: 'Event D', text: 'This is sample text for the event bubble.' }
     ];
 
     timeline.init('timeline', years, events);
