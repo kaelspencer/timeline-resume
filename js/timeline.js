@@ -9,6 +9,9 @@ var timeline = {
     year: null,
     events: null,
 
+    /* Constants */
+    bubble_width: 200,
+
     init: function(element, years, events) {
         timeline.container = $('#' + element);
         timeline.line = $('<div>').addClass('line');
@@ -16,7 +19,7 @@ var timeline = {
         timeline.bubble_base = $('<div>')
             .addClass('bubble')
             .height(150) // This needs to be in sync with the CSS class.
-            .width(200); // This needs to be in sync with the CSS class.
+            .width(timeline.bubble_width); // This needs to be in sync with the CSS class.
 
         timeline.bubble_top = {
             target_y: function() { return timeline.line.position().top - 24 },
@@ -72,7 +75,7 @@ var timeline = {
         // element_size = width of text + margin left + margin right = 100 + 20 + 80
         // Subtract the right marging from the last div.
         // width = (number of years) * (100 + 20 + 80) - 60
-        timeline.width = (timeline.year.end - timeline.year.start + 1) * 200 - 60;
+        timeline.width = (timeline.year.end - timeline.year.start + 1) * timeline.bubble_width - 60;
 
         $('#line-draggable div').last().addClass('last');
         timeline.line.css('width', '100%');
@@ -104,15 +107,15 @@ var timeline = {
         $('#timeline .bubble-container').remove();
         var container_bottom = $('<div>').addClass('bubble-container');
         var container_top = container_bottom.clone();
-        var offset = timeline.draggable.position().left;
+        var on_screen_events = [];
+        var top = true;
 
         timeline.container.prepend(container_top);
         timeline.container.append(container_bottom);
 
-        var on_screen_events = [];
-
+        // Find the events that are on the viewable timeline.
         $.each(timeline.events, function() {
-            var date_position = timeline.determine_date_position(this.date, offset);
+            var date_position = timeline.determine_date_position(this.date);
 
             if (date_position > 0) {
                 on_screen_events.push({
@@ -122,12 +125,20 @@ var timeline = {
             }
         });
 
+        on_screen_events.sort(function(a, b) {
+            return (a.date_position == b.date_position ? 0 : (a.date_position > b.date_position ? 1 : -1));
+        });
+
+        // Create the events that are viewable.
         $.each(on_screen_events, function() {
-            timeline.create_bubble(this.event, timeline.bubble_top, container_top, this.date_position);
+            var container = (top ? container_top : container_bottom);
+            var bubble = (!(top = !top) ? timeline.bubble_top : timeline.bubble_bottom);
+
+            timeline.create_bubble(this.event, bubble, container, this.date_position);
         });
     },
     create_bubble: function(event, data, container, date_position) {
-        var left = date_position - 50;
+        var left = date_position - 100;
         var bubble = timeline.bubble_base.clone()
             .appendTo(container)
             .css({
@@ -171,12 +182,12 @@ var timeline = {
             });
         return line;
     },
-    determine_date_position: function(date, offset) {
+    determine_date_position: function(date) {
         // The first part of a year starts on the center of the displayed year.
         // A value of 2012.0 passed in would be in the center of "2012".
         var start = 70;
         var end = timeline.width - 70;
-        var pos = start + (date - timeline.year.start) * 200 + offset;
+        var pos = start + (date - timeline.year.start) * 200 + timeline.draggable.position().left;
 
         return pos;
     }
@@ -191,7 +202,7 @@ $(function() {
         { date: 2005, title: 'Event A', text: 'This is sample text for the event bubble.' },
         { date: 2006, title: 'Event B', text: 'This is sample text for the event bubble.' },
         { date: 2007, title: 'Event C', text: 'This is sample text for the event bubble.' },
-        { date: 2008, title: 'Event D', text: 'This is sample text for the event bubble.' }
+        { date: 2008, title: 'Event D', text: 'This is sample text for the event bubble.' },
     ];
 
     timeline.init('timeline', years, events);
