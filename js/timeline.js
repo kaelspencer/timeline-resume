@@ -109,16 +109,25 @@ var timeline = {
         timeline.container.prepend(container_top);
         timeline.container.append(container_bottom);
 
-        $.each(timeline.events, function() {
-            var target = timeline.determine_date_position(this.date, offset);
+        var on_screen_events = [];
 
-            if (target > 0) {
-                timeline.create_bubble(container_top, timeline.bubble_top, target, this);
+        $.each(timeline.events, function() {
+            var date_position = timeline.determine_date_position(this.date, offset);
+
+            if (date_position > 0) {
+                on_screen_events.push({
+                    'event': this,
+                    'date_position': date_position
+                });
             }
         });
+
+        $.each(on_screen_events, function() {
+            timeline.create_bubble(this.event, timeline.bubble_top, container_top, this.date_position);
+        });
     },
-    create_bubble: function(container, data, offset, event) {
-        var left = offset - 50;
+    create_bubble: function(event, data, container, date_position) {
+        var left = date_position - 50;
         var bubble = timeline.bubble_base.clone()
             .appendTo(container)
             .css({
@@ -132,7 +141,7 @@ var timeline = {
         var top = bubble.position().top;
 
         var target = {
-            x: offset,
+            x: date_position,
             y: data.target_y()
         }
 
@@ -179,10 +188,10 @@ $(function() {
         end: 2012
     }
     var events = [
-        { date: 2003, title: 'Event A', text: 'This is sample text for the event bubble.' },
-        { date: 2005, title: 'Event B', text: 'This is sample text for the event bubble.' },
-        { date: 2008, title: 'Event C', text: 'This is sample text for the event bubble.' },
-        { date: 2011, title: 'Event D', text: 'This is sample text for the event bubble.' }
+        { date: 2005, title: 'Event A', text: 'This is sample text for the event bubble.' },
+        { date: 2006, title: 'Event B', text: 'This is sample text for the event bubble.' },
+        { date: 2007, title: 'Event C', text: 'This is sample text for the event bubble.' },
+        { date: 2008, title: 'Event D', text: 'This is sample text for the event bubble.' }
     ];
 
     timeline.init('timeline', years, events);
