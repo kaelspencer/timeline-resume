@@ -80,7 +80,7 @@ var timeline = {
         $('#line-draggable div').last().addClass('last');
         timeline.line.css('width', '100%');
 
-        timeline.draggable.animate({ left: '-=300' }, 50, timeline.draw);
+        timeline.draggable.animate({ left: '-=300' }, 0, timeline.draw);
     },
     horizontal_scroll_stop: function(event, ui) {
         var window_width = $(window).width();
@@ -147,7 +147,7 @@ var timeline = {
             })
             .text(event.text);
         $('<h1>')
-            .text(event.title)
+            .html('<a href="#' + event.slug + '">' + event.title + '</a>')
             .prependTo(bubble);
         var top = bubble.position().top;
 
@@ -199,11 +199,12 @@ $(function() {
         end: 2012
     }
     var events = [
-        { date: 2005, title: 'Event A', text: 'This is sample text for the event bubble.' },
-        { date: 2006, title: 'Event B', text: 'This is sample text for the event bubble.' },
-        { date: 2007, title: 'Event C', text: 'This is sample text for the event bubble.' },
-        { date: 2008, title: 'Event D', text: 'This is sample text for the event bubble.' },
+        { date: 2005, title: 'Event A', slug: 'event_a', text: 'This is sample text for the event bubble.' },
+        { date: 2006, title: 'Event B', slug: 'event_b', text: 'This is sample text for the event bubble.' },
+        { date: 2007, title: 'Event C', slug: 'event_c', text: 'This is sample text for the event bubble.' },
+        { date: 2008, title: 'Event D', slug: 'event_d', text: 'This is sample text for the event bubble.' },
     ];
 
     timeline.init('timeline', years, events);
+    create_pages(events);
 });

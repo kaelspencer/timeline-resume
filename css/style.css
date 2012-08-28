@@ -1,6 +1,7 @@
 @import url(normalize.css);
 @import url(text.css);
 @import url(timeline.css);
+@import url(page.css);
 
 body {
 	background-color: #d3d5d1;

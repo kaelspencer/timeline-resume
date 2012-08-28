@@ -63,3 +63,14 @@
     border: 1px solid rgba(141, 130, 125, 0.5);
     position: absolute;
 }
+
+.timeline a,
+.timeline a:visited {
+    text-decoration: none;
+    color: #8d827d;
+}
+
+.timeline a:hover,
+.timeline a:active {
+    color: #364364;
+}
